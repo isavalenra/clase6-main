@@ -73,15 +73,17 @@ class sistemaV:
         if tipo == "canino":
             self.__lista_canino[Mascota.verHistoria()]=Mascota
 
-    def verFechaIngreso(self,histoira):
+    def verFechaIngreso(self,historia):
 
         for masc in self.__lista_felino:
-            if histoira == masc.verHistoria():
+            if historia == masc.verHistoria():
                 return masc.verFecha()
         for masc in self.__lista_canino:
             if historia == masc.verHistoria():
                 return masc.verFecha()
 
+
+    
     def verMedicamento(self,historia):
 
         for masc in self.__lista_canino:
@@ -89,7 +91,7 @@ class sistemaV:
                 return masc.masc.verHistoria()
         for masc in self.__lista_felino:
             if historia == masc.verHistoria():
-                return mesc.verLista_Medicamentos()
+                return masc.verLista_Medicamentos()
         return None
 
 def eliminarMedicamento(lista_med, nombre_medicamento):
@@ -110,15 +112,17 @@ def eliminarMascota(self, historia):
             self.__lista_felino.remove(masc)
             return True
     return False
+
+
 def agragarMedicamento(lista_med,nombre_medicamento,dosis):
     for m in lista_med:
         if m.verNombre() == nombre_medicamento:
-            print("este medicamento ya esta en la lista. no se agregara nuevamente.")
-            return
-    Medicamento = medicamento()
-    medicamento.asignarNombre(nombre_medicamento)
-    Medicamento.asignarDosis(dosis)
-    lista_med.append(Medicamento)
+            return True
+    Medicamentos = Medicamento()
+    Medicamentos.asignarNombre(nombre_medicamento)
+    Medicamentos.asignarDosis(dosis)
+    lista_med.append(Medicamentos)
+
 
 
 def main():
@@ -144,6 +148,7 @@ def main():
                 tipo=input("Ingrese el tipo de mascota (felino o canino): ")
                 peso=int(input("Ingrese el peso de la mascota: "))
                 fecha=input("Ingrese la fecha de ingreso (dia/mes/año): ")
+                fecha= datetime.strptime(fecha, "%d/%m/%Y")
                 nm=int(input("Ingrese cantidad de medicamentos: "))
                 lista_med=[]
                 
@@ -151,17 +156,20 @@ def main():
                 for i in range(0,nm):
                     nombre_medicamentos = input("Ingrese el nombre del medicamento: ")
                     dosis =int(input("Ingrese la dosis: "))
-                    agragarMedicamento(lista_med, nombre_medicamento, dosis)
+                    if agragarMedicamento(lista_med, nombre_medicamentos, dosis):
+                        print("este medicamento ya esta en la lista. no se agregara nuevamente.")
 
-                
-                mas= Mascota()
-                mas.asignarNombre(nombre)
-                mas.asignarHistoria(historia)
-                mas.asignarPeso(peso)
-                mas.asignarTipo(tipo)
-                mas.asignarFecha(fecha)
-                mas.asignarLista_Medicamentos(lista_med)
-                servicio_hospitalario.ingresarMascota(mas)
+                    else:
+                        agragarMedicamento(lista_med, nombre_medicamentos, dosis)
+                        print("Agregado")
+                    mas= Mascota()
+                    mas.asignarNombre(nombre)
+                    mas.asignarHistoria(historia)
+                    mas.asignarPeso(peso)
+                    mas.asignarTipo(tipo)
+                    mas.asignarFecha(fecha.date())
+                    mas.asignarLista_Medicamentos(lista_med)
+                    servicio_hospitalario.ingresarMascota(mas,tipo)
 
             else:
                 print("Ya existe la mascota con el numero de histoira clinica")
@@ -202,7 +210,7 @@ def main():
             q = int(input("ingrese el nombre del medicamento a eliminar:"))
             mascota = servicio_hospitalario.verMascota(q)
             if mascota:
-                nombre_medicamento(mascota.verLista_Medicamentos(), nombre_medicamento)
+                q(mascota.verLista_Medicamentos(), q)
             else:
                 print("la historia clinica ingresada no corresponde a ninguna mascotaen el sistema")
 
@@ -212,6 +220,8 @@ def main():
         
         else:
             print("Usted ingresó una opción no válida, intentelo nuevamente...")
+
+        h= 0
 
 if __name__=='__main__':
     main()
